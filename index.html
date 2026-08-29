@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#208b54">
+  <title>Lista de Compras</title>
+  <style>
+    :root{--green:#208b54;--green2:#eaf7ef;--ink:#1e2923;--muted:#68736c;--line:#dfe8e2;--paper:#fff;--bg:#f3f7f4;--red:#b33b3b}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+    main{width:min(760px,100%);margin:auto;padding:18px 14px 60px}.hero{background:linear-gradient(135deg,#176d42,#28a765);color:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 28px #176d4225}
+    h1{margin:0;font-size:clamp(1.65rem,6vw,2.35rem)}.hero p{margin:7px 0 16px;opacity:.9}.progress-row{display:flex;justify-content:space-between;font-weight:700;font-size:.9rem;margin-bottom:7px}.bar{height:10px;background:#ffffff40;border-radius:20px;overflow:hidden}.bar span{display:block;width:0;height:100%;background:#fff;border-radius:inherit;transition:.25s}
+    .tools{display:flex;gap:9px;margin:14px 0;flex-wrap:wrap}.search{flex:1;min-width:190px;border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px 15px;font-size:1rem;outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #208b5420}button{border:0;cursor:pointer;font:inherit}.reset,.add{border-radius:14px;padding:0 15px;min-height:46px;font-weight:700}.reset{background:#fff;color:var(--red);border:1px solid #efd3d3}.add{background:var(--green);color:#fff;box-shadow:0 5px 14px #208b5430}
+    .tabs{display:grid;grid-template-columns:1fr 1fr;background:#e4ebe6;border-radius:14px;padding:4px;margin:14px 0}.tab{padding:11px 8px;border-radius:11px;background:transparent;font-weight:750;color:var(--muted)}.tab.active{background:#fff;color:var(--green);box-shadow:0 2px 8px #203a2920}
+    .section{background:var(--paper);border:1px solid var(--line);border-radius:18px;margin:12px 0;overflow:hidden}.section h2{font-size:1rem;margin:0;padding:14px 16px;background:#f8fbf9;border-bottom:1px solid var(--line)}
+    .item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid #edf1ee;cursor:pointer;transition:.15s}.item:last-child{border:0}.item:hover{background:#f8fcf9}.item input{appearance:none;width:23px;height:23px;border:2px solid #a8b5ad;border-radius:7px;display:grid;place-items:center;flex:0 0 auto}.item input:checked{background:var(--green);border-color:var(--green)}.item input:checked:after{content:"✓";color:#fff;font-size:16px;font-weight:900}.name{font-weight:650}.qty{display:block;color:var(--muted);font-size:.86rem;margin-top:2px}.picked .name{text-decoration:line-through;color:#748078}.empty{text-align:center;color:var(--muted);padding:38px 15px;background:#fff;border:1px dashed #bdc9c1;border-radius:18px}.hidden{display:none!important}.footer{text-align:center;color:var(--muted);font-size:.82rem;margin-top:22px}
+    dialog{width:min(440px,calc(100% - 28px));border:0;border-radius:20px;padding:0;box-shadow:0 20px 70px #10221855}dialog::backdrop{background:#10221899;backdrop-filter:blur(2px)}.modal{padding:22px}.modal h2{margin:0 0 5px}.modal p{margin:0 0 18px;color:var(--muted)}.field{display:block;margin:13px 0;font-weight:700;font-size:.9rem}.field input,.field select{display:block;width:100%;margin-top:6px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;font:inherit;color:var(--ink);outline:none}.field input:focus,.field select:focus{border-color:var(--green);box-shadow:0 0 0 3px #208b5420}.actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}.cancel,.save-product{padding:11px 16px;border-radius:12px;font-weight:750}.cancel{background:#edf2ee;color:var(--ink)}.save-product{background:var(--green);color:#fff}.error{min-height:20px;color:var(--red);font-size:.86rem;font-weight:650;margin-top:5px}
+    @media(max-width:430px){.tools .search{flex-basis:100%}.reset,.add{flex:1}.hero{padding:19px}.item{padding:13px}}
+  </style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <h1>🛒 Lista de Compras</h1><p>Toque no produto quando colocá-lo no carrinho.</p>
+    <div class="progress-row"><span id="status">0 de 0 produtos</span><span id="percent">0%</span></div><div class="bar"><span id="bar"></span></div>
+  </header>
+  <div class="tools"><input id="search" class="search" type="search" placeholder="🔎 Buscar produto..." aria-label="Buscar produto"><button id="add" class="add">＋ Adicionar produto</button><button id="reset" class="reset">Limpar</button></div>
+  <nav class="tabs"><button class="tab active" data-view="pending">Para pegar <span id="pendingCount"></span></button><button class="tab" data-view="picked">Produtos pegos <span id="pickedCount"></span></button></nav>
+  <section id="content"></section><p class="footer">As marcações ficam salvas neste navegador.</p>
+</main>
+<dialog id="productDialog">
+  <form id="productForm" class="modal">
+    <h2>Adicionar produto</h2><p>Inclua um novo item na sua lista.</p>
+    <label class="field">Nome do produto<input id="productName" maxlength="60" required placeholder="Ex.: Óleo de cozinha"></label>
+    <label class="field">Quantidade (opcional)<input id="productQty" maxlength="30" placeholder="Ex.: 2 unidades"></label>
+    <label class="field">Categoria<select id="productCategory"></select></label>
+    <div id="formError" class="error" role="alert"></div>
+    <div class="actions"><button type="button" id="cancelAdd" class="cancel">Cancelar</button><button class="save-product" type="submit">Adicionar</button></div>
+  </form>
+</dialog>
+<script>
+let groups=[
+ ["☕ Alimentos e bebidas",[["🍚","Arroz","6 kg"],["🫘","Feijão-carioca Kaldinho","3 pacotes"],["🍚","Açúcar","6 unidades"],["☕","Café","8 unidades"],["☕","Café solúvel","1 unidade"],["🥛","Leite","20 pacotes"],["🧈","Margarina","2 unidades"],["🥫","Sardinha 88","3 unidades"],["🥫","Kitut",""],["🍶","Vinagre",""],["🌾","Farinha",""],["🍪","Biscoitos",""]]],
+ ["🥩 Carnes e frios",[["🍗","Filé de frango","6 unidades"],["🍗","Coxa com sobrecoxa de frango","2 unidades"],["🍗","Coxinha da asa de frango","2 unidades"],["🌭","Linguiça Suína Aurora",""],["🌭","Linguiça Seara",""],["🥩","Bisteca",""],["🐟","Filé de peixe",""],["🥩","Fígado",""],["🧀","Queijo",""],["🥓","Mortadela",""]]],
+ ["🍞 Padaria",[["🍞","Pão","2 pacotes"]]],
+ ["🍎 Frutas e verduras",[["🧄","Alho","4 unidades"],["🍋","Limão","10 unidades"],["🍌","Banana",""],["🍅","Tomate",""],["🍎","Frutas",""]]],
+ ["🎉 Festa da Maria",[["🥔","Batata Pringles","7 unidades"],["🍫","Bombom Garoto","2 caixas"],["🍬","Chiclete Big Big","1 unidade"],["🍭","Pirulito Big Big",""],["🥤","Coca-Cola","6 latas"]]],
+ ["🧴 Higiene pessoal",[["🩸","Absorvente","1 pacote"],["🧼","Sabonetes","10 unidades"],["🧴","Shampoo adulto",""],["🪥","Escovas de dentes",""]]],
+ ["🧹 Limpeza",[["🧻","Toalha de papel",""],["🧼","Sabão em pó","7 pacotes"],["🧴","Detergente","3 unidades"],["🧹","Vassoura Condor",""]]],
+ ["📄 Papelaria",[["📄","Papel Chamex","2 pacotes"]]]
+];
+const key="lista-compras-maria-v1",customKey="lista-compras-maria-custom-v1",picked=new Set(JSON.parse(localStorage.getItem(key)||"[]")),custom=JSON.parse(localStorage.getItem(customKey)||"[]");let view="pending";
+const slug=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
+custom.forEach(item=>{const group=groups.find(g=>g[0]===item.category)||groups[0];group[1].push(["🛍️",item.name,item.qty])});
+function save(){localStorage.setItem(key,JSON.stringify([...picked]))}
+function render(){const q=slug(document.querySelector("#search").value),out=document.querySelector("#content");let html="",visible=0,total=groups.reduce((n,g)=>n+g[1].length,0);
+ groups.forEach(([title,items])=>{const list=items.filter(([,name])=>picked.has(slug(name))===(view==="picked")&&slug(name).includes(q));if(!list.length)return;visible+=list.length;html+=`<div class="section ${view==='picked'?'picked':''}"><h2>${title}</h2>`+list.map(([icon,name,qty])=>{const id=slug(name);return `<label class="item"><input type="checkbox" data-id="${id}" ${picked.has(id)?'checked':''}><span><span class="name">${icon} ${name}</span>${qty?`<small class="qty">${qty}</small>`:''}</span></label>`}).join("")+"</div>"});
+ out.innerHTML=html||`<div class="empty">${q?'Nenhum produto encontrado.':view==='picked'?'Nenhum produto foi marcado ainda.':'🎉 Todos os produtos foram pegos!'}</div>`;
+ const done=picked.size,pct=Math.round(done/total*100);document.querySelector("#status").textContent=`${done} de ${total} produtos`;document.querySelector("#percent").textContent=pct+"%";document.querySelector("#bar").style.width=pct+"%";document.querySelector("#pendingCount").textContent=`(${total-done})`;document.querySelector("#pickedCount").textContent=`(${done})`;
+ document.querySelectorAll("[data-id]").forEach(el=>el.onchange=()=>{el.checked?picked.add(el.dataset.id):picked.delete(el.dataset.id);save();render()});
+}
+const dialog=document.querySelector("#productDialog"),category=document.querySelector("#productCategory");groups.forEach(([title])=>category.add(new Option(title,title)));
+document.querySelector("#add").onclick=()=>{document.querySelector("#productForm").reset();document.querySelector("#formError").textContent="";dialog.showModal();setTimeout(()=>document.querySelector("#productName").focus(),50)};
+document.querySelector("#cancelAdd").onclick=()=>dialog.close();dialog.onclick=e=>{if(e.target===dialog)dialog.close()};
+document.querySelector("#productForm").onsubmit=e=>{e.preventDefault();const name=document.querySelector("#productName").value.trim(),qty=document.querySelector("#productQty").value.trim(),cat=category.value,id=slug(name);if(!name)return;if(groups.some(g=>g[1].some(item=>slug(item[1])===id))){document.querySelector("#formError").textContent="Esse produto já está na lista.";return}const entry={name,qty,category:cat};custom.push(entry);localStorage.setItem(customKey,JSON.stringify(custom));groups.find(g=>g[0]===cat)[1].push(["🛍️",name,qty]);dialog.close();view="pending";document.querySelectorAll(".tab").forEach((x,i)=>x.classList.toggle("active",i===0));document.querySelector("#search").value="";render()};
+document.querySelector("#search").oninput=render;document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{view=b.dataset.view;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));render()});
+document.querySelector("#reset").onclick=()=>{if(!picked.size||confirm("Deseja desmarcar todos os produtos?")){picked.clear();save();view="pending";document.querySelectorAll(".tab").forEach((x,i)=>x.classList.toggle("active",i===0));render()}};render();
+</script>
+</body>
+</html>
