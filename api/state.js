@@ -1,0 +1,2 @@
+import {sql,init} from '../lib/db.js';
+export default async function handler(req,res){try{await init();if(req.method==='GET'){const r=await sql`select data from shopping_state where id='main'`;return res.status(200).json(r[0]?.data||null)}if(req.method==='POST'){const data=req.body;await sql`insert into shopping_state(id,data,updated_at) values('main',${sql.json(data)},now()) on conflict(id) do update set data=${sql.json(data)},updated_at=now()`;return res.status(200).json({ok:true})}res.status(405).end()}catch(e){res.status(500).json({error:e.message})}}

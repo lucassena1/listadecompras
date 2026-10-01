@@ -1,0 +1,5 @@
+{
+  "name":"lista-compras-comparador","private":true,"version":"2.0.0","type":"module",
+  "dependencies":{"@vercel/blob":"^0.27.0","pdf-parse":"^1.1.1","postgres":"^3.4.5"},
+  "engines":{"node":">=20"}
+}

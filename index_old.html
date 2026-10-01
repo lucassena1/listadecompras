@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#208b54">
+  <title>Lista de Compras</title>
+  <style>
+:root{--green:#17824f;--green-dark:#0e633b;--green-soft:#eaf6ef;--ink:#17221c;--muted:#6b756f;--line:#e4e9e6;--paper:#fff;--bg:#f5f7f6;--red:#b83d49;--amber:#9a6510;--shadow:0 8px 28px rgba(24,49,35,.07)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button{border:0;cursor:pointer}main{width:min(1080px,100%);margin:auto;padding:24px 18px 64px}
+.hero{position:relative;overflow:hidden;background:linear-gradient(120deg,#0f6c40 0%,#198653 60%,#2b9b66 100%);color:#fff;border-radius:26px;padding:28px;box-shadow:0 14px 40px rgba(20,113,68,.18)}.hero:after{content:"";position:absolute;width:230px;height:230px;border-radius:50%;background:rgba(255,255,255,.07);right:-70px;top:-100px}.hero h1{margin:0;font-size:clamp(1.75rem,4vw,2.5rem);letter-spacing:-.035em}.hero p{margin:7px 0 22px;opacity:.84}.progress-row{display:flex;justify-content:space-between;gap:12px;font-weight:750;font-size:.92rem;margin-bottom:9px}.bar{height:9px;background:rgba(255,255,255,.22);border-radius:99px;overflow:hidden}.bar span{display:block;width:0;height:100%;background:#fff;border-radius:inherit;transition:width .35s ease}
+.tools{display:flex;gap:10px;margin:18px 0 14px;flex-wrap:wrap}.search{flex:1;min-width:240px;border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px 16px;outline:none;box-shadow:0 2px 10px rgba(20,40,30,.025)}.search:focus{border-color:#72b592;box-shadow:0 0 0 4px rgba(23,130,79,.09)}.reset,.add{border-radius:14px;padding:0 17px;min-height:48px;font-weight:760}.reset{background:#fff;color:var(--red);border:1px solid #efd9dc}.add{background:var(--green);color:#fff;box-shadow:0 6px 18px rgba(23,130,79,.18)}.add:hover{background:var(--green-dark)}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#e9eeeb;border:1px solid #e1e7e3;border-radius:16px;padding:5px;margin:14px 0 18px;position:sticky;top:8px;z-index:10;box-shadow:0 5px 18px rgba(25,45,34,.05)}.tab{padding:12px 10px;border-radius:12px;background:transparent;font-weight:760;color:#66716a;transition:.2s}.tab:hover{color:var(--green)}.tab.active{background:#fff;color:var(--green);box-shadow:0 3px 12px rgba(25,45,34,.08)}
+.section{margin:18px 0}.section h2{font-size:.88rem;text-transform:uppercase;letter-spacing:.055em;color:#66716a;margin:0 0 9px;padding:0 4px}.item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:14px;padding:15px 17px;margin:8px 0;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 3px 14px rgba(24,49,35,.035);cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}.item:hover{transform:translateY(-1px);box-shadow:var(--shadow);border-color:#d5ded8}.item input{appearance:none;width:24px;height:24px;border:2px solid #aab5ae;border-radius:8px;display:grid;place-items:center;flex:0 0 auto;transition:.18s}.item input:checked{background:var(--green);border-color:var(--green);transform:scale(1.06)}.item input:checked:after{content:"✓";color:#fff;font-size:16px;font-weight:900}.item-main{min-width:0}.name{display:block;font-weight:760;font-size:.98rem}.qty{display:block;color:var(--muted);font-size:.84rem;margin-top:3px}.price-meta{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:8px}.store-badge,.save-badge,.date-badge{display:inline-flex;align-items:center;border-radius:999px;padding:5px 8px;font-size:.74rem;font-weight:720}.store-badge{background:var(--green-soft);color:var(--green-dark)}.save-badge{background:#fff5df;color:var(--amber)}.date-badge{background:#f1f3f2;color:#737d77}.item-price{text-align:right;min-width:104px}.item-price small{display:block;color:var(--muted);font-size:.7rem;margin-bottom:2px}.item-price strong{font-size:1.02rem;color:var(--green-dark)}.picked .name{text-decoration:line-through;color:#7a847e}.picked .item{opacity:.72;animation:checkedPulse .25s ease}@keyframes checkedPulse{0%{transform:scale(.985)}100%{transform:scale(1)}}.empty{text-align:center;color:var(--muted);padding:44px 16px;background:#fff;border:1px dashed #cbd4ce;border-radius:18px}.hidden{display:none!important}.footer{text-align:center;color:var(--muted);font-size:.8rem;margin-top:28px}
+dialog{width:min(460px,calc(100% - 28px));border:0;border-radius:22px;padding:0;box-shadow:0 24px 80px rgba(16,34,24,.28)}dialog::backdrop{background:rgba(16,34,24,.58);backdrop-filter:blur(3px)}.modal{padding:24px}.modal h2{margin:0 0 5px}.modal p{margin:0 0 18px;color:var(--muted)}.field{display:block;margin:13px 0;font-weight:700;font-size:.88rem}.field input,.field select{display:block;width:100%;margin-top:6px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;outline:none}.field input:focus,.field select:focus{border-color:#72b592;box-shadow:0 0 0 4px rgba(23,130,79,.09)}.actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}.cancel,.save-product{padding:11px 16px;border-radius:12px;font-weight:750}.cancel{background:#edf2ee;color:var(--ink)}.save-product{background:var(--green);color:#fff}.error{min-height:20px;color:var(--red);font-size:.84rem;font-weight:650;margin-top:5px}
+.compare{background:#fff;border:1px solid var(--line);border-radius:22px;margin:16px 0;overflow:hidden;box-shadow:var(--shadow)}.compare-head{padding:20px 22px;background:linear-gradient(180deg,#fbfcfb,#f7faf8);border-bottom:1px solid var(--line)}.compare-head h2{margin:0 0 5px;font-size:1.15rem}.compare-head p{margin:0;color:var(--muted);font-size:.86rem}.compare-scroll{overflow:auto}.compare table{width:100%;border-collapse:collapse;min-width:720px}.compare th,.compare td{padding:13px 15px;border-bottom:1px solid #edf1ee;text-align:left;font-size:.84rem;vertical-align:top}.compare th{background:#fbfcfb;color:#5f6a63;position:sticky;top:0}.best{font-weight:800;color:var(--green)}.na{color:#98a19b}.sum-box{margin:17px 20px;padding:17px 18px;border-radius:16px;background:var(--green-soft);display:flex;justify-content:space-between;gap:12px;align-items:center}.sum-box strong{font-size:1.45rem;color:var(--green-dark)}.note{padding:0 20px 20px;color:var(--muted);font-size:.79rem;line-height:1.5}.compare-view{display:none}.compare-view.active{display:block}
+@media(max-width:650px){main{padding:14px 11px 48px}.hero{padding:21px;border-radius:20px}.tools .search{flex-basis:100%}.reset,.add{flex:1}.tabs{top:5px}.tab{font-size:.82rem;padding:11px 5px}.item{grid-template-columns:auto minmax(0,1fr);padding:14px 13px;gap:11px}.item-price{grid-column:2;text-align:left;min-width:0;margin-top:-3px}.price-meta{gap:5px}.store-badge,.save-badge,.date-badge{font-size:.7rem}.compare-head{padding:17px}.sum-box{margin:14px;align-items:flex-end}.sum-box strong{font-size:1.25rem}}
+</style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <h1>🛒 Lista de Compras</h1><p>Compare preços, economize e acompanhe sua compra em tempo real.</p>
+    <div class="progress-row"><span id="status">0 de 0 produtos</span><span id="percent">0%</span></div><div class="bar"><span id="bar"></span></div>
+  </header>
+  <div class="tools"><input id="search" class="search" type="search" placeholder="🔎 Buscar produto..." aria-label="Buscar produto"><button id="add" class="add">＋ Adicionar produto</button><button id="reset" class="reset">Limpar</button></div>
+  <nav class="tabs"><button class="tab active" data-view="pending">🛒 Para pegar <span id="pendingCount"></span></button><button class="tab" data-view="picked">✅ Produtos pegos <span id="pickedCount"></span></button><button class="tab" data-view="compare">💰 Comparativo</button></nav>
+  <section id="content"></section>
+  <section class="compare compare-view" id="comparativo">
+    <div class="compare-head"><h2>💰 Comparativo de preços — Assaí x Mateus</h2><p>Ofertas de 01/10/2026. A coluna “Melhor compra” considera o menor preço comparável encontrado nos encartes.</p></div>
+    <div class="compare-scroll"><table><thead><tr><th>Produto</th><th>Quantidade</th><th>Assaí</th><th>Mateus</th><th>Melhor compra</th><th>Subtotal</th></tr></thead><tbody id="compareBody"></tbody></table></div>
+    <div class="sum-box"><span><b>Total estimado da compra</b><br><small>Somente itens com quantidade e oferta comparável</small></span><strong id="bestTotal">R$ 0,00</strong></div>
+    <div class="note">⚠️ Itens sem quantidade/peso definido ou sem oferta equivalente no encarte não entram no total. Para carnes vendidas por kg, o total só foi calculado quando sua lista informa o peso. No caso do filé de frango, considerei 6 bandejas de 1 kg. Preços promocionais podem exigir CPF/app e estão sujeitos ao período e estoque da loja.</div>
+  </section>
+  <p class="footer">As marcações ficam salvas neste navegador.</p>
+</main>
+<dialog id="productDialog">
+  <form id="productForm" class="modal">
+    <h2>Adicionar produto</h2><p>Inclua um novo item na sua lista.</p>
+    <label class="field">Nome do produto<input id="productName" maxlength="60" required placeholder="Ex.: Óleo de cozinha"></label>
+    <label class="field">Quantidade (opcional)<input id="productQty" maxlength="30" placeholder="Ex.: 2 unidades"></label>
+    <label class="field">Categoria<select id="productCategory"></select></label>
+    <div id="formError" class="error" role="alert"></div>
+    <div class="actions"><button type="button" id="cancelAdd" class="cancel">Cancelar</button><button class="save-product" type="submit">Adicionar</button></div>
+  </form>
+</dialog>
+<script>
+let groups=[
+ ["☕ Alimentos e bebidas",[["🍚","Arroz","8 kg"],["🫘","Feijão-carioca Kaldinho","3 pacotes"],["🍚","Açúcar","6 unidades"],["☕","Café","8 unidades"],["☕","Café solúvel","1 unidade"],["🥛","Leite","25 pacotes"],["🧈","Margarina","2 unidades"],["🥫","Sardinha 88","4 unidades"],["🥫","Kitut","3 unidades"],["🍪","Biscoitos","4 unidades"],["🛢️","Óleo","3 litros"],["🧃","Suco",""] ,["💧","Água","2 litros"],["🌾","Multicereais",""]]],
+ ["🥩 Carnes e frios",[["🍗","Filé de frango","6 unidades"],["🍗","Coxa com sobrecoxa de frango","2 kg"],["🌭","Linguiça Suína Aurora",""] ,["🌭","Linguiça Seara",""] ,["🥩","Bisteca",""] ,["🐟","Filé de peixe",""] ,["🥩","Fígado",""]]],
+ ["🍞 Padaria",[["🍞","Pão","2 pacotes"]]],
+ ["🍎 Frutas e verduras",[["🧄","Alho","10 unidades"],["🍌","Banana","6 unidades"],["🍅","Tomate","10 unidades"],["🍎","Maçã","10 unidades"]]],
+ ["🍿 Lanches",[["🥔","Batata Pringles","10 unidades"]]],
+ ["🧴 Higiene pessoal",[["🩸","Absorvente","2 pacotes"],["🧼","Sabonetes","10 unidades"],["🧴","Creme de cabelo",""] ,["🪥","Pasta de dente","5 unidades"]]],
+ ["🧹 Limpeza e utilidades",[["🧼","Sabão em pó","7 pacotes"],["🗑️","Saco de lixo 50 litros",""] ,["🔥","Fósforo",""]]]
+];
+const comparison=[
+ {p:"Arroz",q:"8 kg",a:"R$ 3,69/kg",m:"R$ 18,49/5 kg (R$ 3,70/kg)",best:"Assaí",sub:29.52},
+ {p:"Feijão-carioca Kaldinho",q:"3 pacotes",a:"—",m:"—",best:"Sem oferta",sub:null},
+ {p:"Açúcar",q:"6 un.",a:"R$ 3,39/kg",m:"R$ 2,99/kg c/ CPF",best:"Mateus",sub:17.94},
+ {p:"Café",q:"8 un.",a:"R$ 8,99 (Bom Jesus 250g)",m:"R$ 11,29 (Maratá 250g)",best:"Assaí",sub:71.92},
+ {p:"Café solúvel",q:"1 un.",a:"R$ 4,29 (Santa Clara 40g)",m:"R$ 3,99 (Kimimo 40g)",best:"Mateus",sub:3.99},
+ {p:"Leite",q:"25 un.",a:"R$ 5,49/L (Italac)",m:"—",best:"Assaí",sub:137.25},
+ {p:"Margarina",q:"2 un.",a:"R$ 7,99/500g (Qualy)",m:"R$ 2,79/250g (Puro Sabor)",best:"Mateus*",sub:5.58},
+ {p:"Sardinha 88",q:"4 un.",a:"R$ 3,29/90g",m:"—",best:"Assaí",sub:13.16},
+ {p:"Kitut",q:"3 un.",a:"—",m:"—",best:"Sem oferta",sub:null},
+ {p:"Biscoitos",q:"4 un.",a:"R$ 0,95 (recheado Richester)",m:"R$ 4,49 (Cream Cracker)",best:"Assaí*",sub:3.80},
+ {p:"Filé de frango",q:"6 un. (1 kg)",a:"R$ 15,90/kg",m:"R$ 15,49/kg c/ CPF",best:"Mateus",sub:92.94},
+ {p:"Coxa/sobrecoxa",q:"2 kg",a:"R$ 7,95/kg",m:"—",best:"Assaí",sub:15.90},
+ {p:"Linguiça Suína Aurora",q:"não informada",a:"—",m:"R$ 21,90/kg (Perdigão)",best:"Sem equivalente",sub:null},
+ {p:"Linguiça Seara",q:"não informada",a:"—",m:"—",best:"Sem oferta",sub:null},
+ {p:"Bisteca",q:"não informada",a:"R$ 13,99/kg (Aurora)",m:"R$ 12,90/kg c/ CPF",best:"Mateus",sub:null},
+ {p:"Filé de peixe",q:"não informada",a:"R$ 19,90/400g (tilápia)",m:"R$ 16,99/kg (tilápia)",best:"Mateus",sub:null},
+ {p:"Fígado",q:"não informada",a:"R$ 12,90/kg c/ app",m:"R$ 11,90/kg c/ CPF",best:"Mateus",sub:null},
+ {p:"Pão",q:"2 pacotes",a:"—",m:"—",best:"Sem oferta",sub:null},
+ {p:"Alho",q:"10 un.",a:"R$ 13,90/kg",m:"—",best:"Assaí (por kg)",sub:null},
+ {p:"Banana",q:"6 un.",a:"R$ 2,49/kg",m:"—",best:"Assaí (por kg)",sub:null},
+ {p:"Tomate",q:"10 un.",a:"R$ 2,99/kg",m:"—",best:"Assaí (por kg)",sub:null},
+ {p:"Maçã",q:"10 un.",a:"—",m:"—",best:"Sem oferta",sub:null},
+ {p:"Batata Pringles",q:"10 un.",a:"R$ 8,79/105g",m:"—",best:"Assaí",sub:87.90},
+ {p:"Absorvente",q:"2 pct.",a:"R$ 3,89 (Intimus 8 un.)",m:"R$ 11,90 (Ladysoft 28 un.)",best:"Assaí*",sub:7.78},
+ {p:"Sabonetes",q:"10 un.",a:"R$ 2,29 (Protex 85g)",m:"—",best:"Assaí",sub:22.90},
+ {p:"Creme de cabelo",q:"não informada",a:"—",m:"R$ 17,99 (kit shampoo+cond.)",best:"Sem equivalente",sub:null},
+ {p:"Sabão em pó",q:"7 pct.",a:"R$ 3,99/400g (Ypê)",m:"R$ 2,99/400g (Minerva)",best:"Mateus",sub:20.93},
+ {p:"Óleo",q:"3 L",a:"—",m:"—",best:"Sem oferta",sub:null},
+ {p:"Pasta de dente",q:"5 un.",a:"R$ 4,59 (Colgate 90g)",m:"—",best:"Assaí",sub:22.95},
+ {p:"Saco de lixo 50 L",q:"não informada",a:"—",m:"—",best:"Sem oferta",sub:null},
+ {p:"Fósforo",q:"1 pct. considerado",a:"—",m:"R$ 2,59 (Paraná 10x1)",best:"Mateus",sub:2.59},
+ {p:"Suco",q:"não informada",a:"R$ 5,99 (cajuína 500ml)",m:"R$ 0,99 (Maguary 150ml)",best:"Depende do volume",sub:null},
+ {p:"Água",q:"2 L",a:"—",m:"R$ 0,89/510ml c/ CPF",best:"Mateus",sub:3.56},
+ {p:"Multicereais",q:"não informada",a:"—",m:"—",best:"Sem oferta",sub:null}
+ ];
+const PRICE_UPDATED="01/10/2026";
+const money=v=>v==null?"—":v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const parseBRL=t=>{const m=String(t||"").match(/R\$\s*([0-9]+(?:,[0-9]{2})?)/);return m?Number(m[1].replace(",",".")):null};
+function getComparison(name){return comparison.find(c=>slug(c.p)===slug(name)||slug(name).includes(slug(c.p))||slug(c.p).includes(slug(name)))}
+function productMeta(name){const x=getComparison(name);if(!x)return {store:"Sem comparação",price:"—",saving:null,date:"—"};const av=parseBRL(x.a),mv=parseBRL(x.m);let store=x.best,price="—",saving=null;if(x.best.startsWith("Assaí")){store="Assaí";price=x.a;saving=av!=null&&mv!=null?Math.abs(mv-av):null}else if(x.best.startsWith("Mateus")){store="Mateus";price=x.m;saving=av!=null&&mv!=null?Math.abs(av-mv):null}else if(x.best==="Depende do volume"){store="Comparar volume"}else if(x.best.includes("Sem")){store=x.best}return {store,price,saving,date:PRICE_UPDATED,unit:/kg|quilo/i.test(x.a+x.m)?"/kg":"/un."}}
+function renderComparison(){document.querySelector("#compareBody").innerHTML=comparison.map(x=>`<tr><td><b>${x.p}</b></td><td>${x.q}</td><td>${x.a}</td><td>${x.m}</td><td class="${x.best.includes('Assaí')||x.best.includes('Mateus')?'best':'na'}">${x.best}</td><td>${money(x.sub)}</td></tr>`).join("");const total=comparison.reduce((s,x)=>s+(x.sub||0),0);document.querySelector("#bestTotal").textContent=money(total)}
+renderComparison();
+const key="lista-compras-atualizada-v2",customKey="lista-compras-atualizada-custom-v2",picked=new Set(JSON.parse(localStorage.getItem(key)||"[]")),custom=JSON.parse(localStorage.getItem(customKey)||"[]");let view="pending";
+const slug=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
+custom.forEach(item=>{const group=groups.find(g=>g[0]===item.category)||groups[0];group[1].push(["🛍️",item.name,item.qty])});
+function save(){localStorage.setItem(key,JSON.stringify([...picked]))}
+function render(){const q=slug(document.querySelector("#search").value),out=document.querySelector("#content"),comp=document.querySelector("#comparativo");let html="",visible=0,total=groups.reduce((n,g)=>n+g[1].length,0);if(view==="compare"){out.classList.add("hidden");comp.classList.add("active");}else{out.classList.remove("hidden");comp.classList.remove("active");}
+ groups.forEach(([title,items])=>{const list=items.filter(([,name])=>picked.has(slug(name))===(view==="picked")&&slug(name).includes(q));if(!list.length)return;visible+=list.length;html+=`<div class="section ${view==='picked'?'picked':''}"><h2>${title}</h2>`+list.map(([icon,name,qty])=>{const id=slug(name),meta=productMeta(name);const saving=meta.saving!=null?`<span class="save-badge">↓ Economize ${money(meta.saving)} ${meta.unit}</span>`:"";const storeClass=(meta.store==="Assaí"||meta.store==="Mateus")?"store-badge":"date-badge";return `<label class="item"><input type="checkbox" data-id="${id}" ${picked.has(id)?'checked':''}><span class="item-main"><span class="name">${icon} ${name}</span>${qty?`<small class="qty">${qty}</small>`:''}<span class="price-meta"><span class="${storeClass}">🏪 ${meta.store}</span>${saving}<span class="date-badge">↻ ${meta.date}</span></span></span><span class="item-price"><small>Menor preço</small><strong>${meta.price}</strong></span></label>`}).join("")+"</div>"});
+ out.innerHTML=html||`<div class="empty">${q?'Nenhum produto encontrado.':view==='picked'?'Nenhum produto foi marcado ainda.':'🎉 Todos os produtos foram pegos!'}</div>`;
+ const done=picked.size,pct=Math.round(done/total*100);document.querySelector("#status").textContent=`${done} de ${total} produtos`;document.querySelector("#percent").textContent=pct+"%";document.querySelector("#bar").style.width=pct+"%";document.querySelector("#pendingCount").textContent=`(${total-done})`;document.querySelector("#pickedCount").textContent=`(${done})`;
+ document.querySelectorAll("[data-id]").forEach(el=>el.onchange=()=>{el.checked?picked.add(el.dataset.id):picked.delete(el.dataset.id);save();render()});
+}
+const dialog=document.querySelector("#productDialog"),category=document.querySelector("#productCategory");groups.forEach(([title])=>category.add(new Option(title,title)));
+document.querySelector("#add").onclick=()=>{document.querySelector("#productForm").reset();document.querySelector("#formError").textContent="";dialog.showModal();setTimeout(()=>document.querySelector("#productName").focus(),50)};
+document.querySelector("#cancelAdd").onclick=()=>dialog.close();dialog.onclick=e=>{if(e.target===dialog)dialog.close()};
+document.querySelector("#productForm").onsubmit=e=>{e.preventDefault();const name=document.querySelector("#productName").value.trim(),qty=document.querySelector("#productQty").value.trim(),cat=category.value,id=slug(name);if(!name)return;if(groups.some(g=>g[1].some(item=>slug(item[1])===id))){document.querySelector("#formError").textContent="Esse produto já está na lista.";return}const entry={name,qty,category:cat};custom.push(entry);localStorage.setItem(customKey,JSON.stringify(custom));groups.find(g=>g[0]===cat)[1].push(["🛍️",name,qty]);dialog.close();view="pending";document.querySelectorAll(".tab").forEach((x,i)=>x.classList.toggle("active",i===0));document.querySelector("#search").value="";render()};
+document.querySelector("#search").oninput=render;document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{view=b.dataset.view;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));render()});
+document.querySelector("#reset").onclick=()=>{if(!picked.size||confirm("Deseja desmarcar todos os produtos?")){picked.clear();save();view="pending";document.querySelectorAll(".tab").forEach((x,i)=>x.classList.toggle("active",i===0));render()}};render();
+</script>
+</body>
+</html>
