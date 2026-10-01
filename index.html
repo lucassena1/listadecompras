@@ -40,16 +40,15 @@
 </dialog>
 <script>
 let groups=[
- ["☕ Alimentos e bebidas",[["🍚","Arroz","6 kg"],["🫘","Feijão-carioca Kaldinho","3 pacotes"],["🍚","Açúcar","6 unidades"],["☕","Café","8 unidades"],["☕","Café solúvel","1 unidade"],["🥛","Leite","20 pacotes"],["🧈","Margarina","2 unidades"],["🥫","Sardinha 88","3 unidades"],["🥫","Kitut",""],["🍶","Vinagre",""],["🌾","Farinha",""],["🍪","Biscoitos",""]]],
- ["🥩 Carnes e frios",[["🍗","Filé de frango","6 unidades"],["🍗","Coxa com sobrecoxa de frango","2 unidades"],["🍗","Coxinha da asa de frango","2 unidades"],["🌭","Linguiça Suína Aurora",""],["🌭","Linguiça Seara",""],["🥩","Bisteca",""],["🐟","Filé de peixe",""],["🥩","Fígado",""],["🧀","Queijo",""],["🥓","Mortadela",""]]],
+ ["☕ Alimentos e bebidas",[["🍚","Arroz","8 kg"],["🫘","Feijão-carioca Kaldinho","3 pacotes"],["🍚","Açúcar","6 unidades"],["☕","Café","8 unidades"],["☕","Café solúvel","1 unidade"],["🥛","Leite","25 pacotes"],["🧈","Margarina","2 unidades"],["🥫","Sardinha 88","4 unidades"],["🥫","Kitut","3 unidades"],["🍪","Biscoitos","4 unidades"],["🛢️","Óleo","3 litros"],["🧃","Suco",""] ,["💧","Água","2 litros"],["🌾","Multicereais",""]]],
+ ["🥩 Carnes e frios",[["🍗","Filé de frango","6 unidades"],["🍗","Coxa com sobrecoxa de frango","2 kg"],["🌭","Linguiça Suína Aurora",""] ,["🌭","Linguiça Seara",""] ,["🥩","Bisteca",""] ,["🐟","Filé de peixe",""] ,["🥩","Fígado",""]]],
  ["🍞 Padaria",[["🍞","Pão","2 pacotes"]]],
- ["🍎 Frutas e verduras",[["🧄","Alho","4 unidades"],["🍋","Limão","10 unidades"],["🍌","Banana",""],["🍅","Tomate",""],["🍎","Frutas",""]]],
- ["🎉 Festa da Maria",[["🥔","Batata Pringles","7 unidades"],["🍫","Bombom Garoto","2 caixas"],["🍬","Chiclete Big Big","1 unidade"],["🍭","Pirulito Big Big",""],["🥤","Coca-Cola","6 latas"]]],
- ["🧴 Higiene pessoal",[["🩸","Absorvente","1 pacote"],["🧼","Sabonetes","10 unidades"],["🧴","Shampoo adulto",""],["🪥","Escovas de dentes",""]]],
- ["🧹 Limpeza",[["🧻","Toalha de papel",""],["🧼","Sabão em pó","7 pacotes"],["🧴","Detergente","3 unidades"],["🧹","Vassoura Condor",""]]],
- ["📄 Papelaria",[["📄","Papel Chamex","2 pacotes"]]]
+ ["🍎 Frutas e verduras",[["🧄","Alho","10 unidades"],["🍌","Banana","6 unidades"],["🍅","Tomate","10 unidades"],["🍎","Maçã","10 unidades"]]],
+ ["🍿 Lanches",[["🥔","Batata Pringles","10 unidades"]]],
+ ["🧴 Higiene pessoal",[["🩸","Absorvente","2 pacotes"],["🧼","Sabonetes","10 unidades"],["🧴","Creme de cabelo",""] ,["🪥","Pasta de dente","5 unidades"]]],
+ ["🧹 Limpeza e utilidades",[["🧼","Sabão em pó","7 pacotes"],["🗑️","Saco de lixo 50 litros",""] ,["🔥","Fósforo",""]]]
 ];
-const key="lista-compras-maria-v1",customKey="lista-compras-maria-custom-v1",picked=new Set(JSON.parse(localStorage.getItem(key)||"[]")),custom=JSON.parse(localStorage.getItem(customKey)||"[]");let view="pending";
+const key="lista-compras-atualizada-v2",customKey="lista-compras-atualizada-custom-v2",picked=new Set(JSON.parse(localStorage.getItem(key)||"[]")),custom=JSON.parse(localStorage.getItem(customKey)||"[]");let view="pending";
 const slug=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
 custom.forEach(item=>{const group=groups.find(g=>g[0]===item.category)||groups[0];group[1].push(["🛍️",item.name,item.qty])});
 function save(){localStorage.setItem(key,JSON.stringify([...picked]))}
